@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bitcoin Seed Backup Guide</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: #0a0a0a;
+            color: #e0e0e0;
+            padding: 0;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        .header {
+            margin-bottom: 40px;
+            border-bottom: 3px solid #f7931a;
+            padding-bottom: 30px;
+        }
+
+        .header h1 {
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 10px;
+            color: #f7931a;
+        }
+
+        .header .subtitle {
+            font-size: 13px;
+            color: #a0a0a0;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .intro {
+            background: rgba(247, 147, 26, 0.08);
+            border-left: 4px solid #f7931a;
+            padding: 20px;
+            margin-bottom: 40px;
+            border-radius: 3px;
+            font-size: 13px;
+            line-height: 1.7;
+            color: #b0b0b0;
+        }
+
+        .section {
+            margin-bottom: 50px;
+        }
+
+        .section-title {
+            font-size: 20px;
+            color: #f7931a;
+            margin-bottom: 15px;
+            font-weight: 700;
+        }
+
+        .section-desc {
+            font-size: 13px;
+            color: #a0a0a0;
+            margin-bottom: 20px;
+        }
+
+        .card {
+            background: #1a1a1a;
+            border: 1px solid #333;
+            border-radius: 3px;
+            padding: 20px;
+            margin-bottom: 15px;
+        }
+
+        .card h3 {
+            color: #f7931a;
+            font-size: 14px;
+            margin-bottom: 8px;
+            font-weight: 700;
+        }
+
+        .card p {
+            font-size: 12px;
+            color: #b0b0b0;
+            line-height: 1.6;
+            margin-bottom: 12px;
+        }
+
+        .card ul {
+            list-style: none;
+            margin-bottom: 12px;
+        }
+
+        .card li {
+            font-size: 12px;
+            color: #a0a0a0;
+            padding: 4px 0;
+            padding-left: 18px;
+            position: relative;
+        }
+
+        .card li:before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: #f7931a;
+            font-weight: bold;
+        }
+
+        .link {
+            display: inline-block;
+            color: #f7931a;
+            text-decoration: none;
+            font-size: 12px;
+            font-weight: 600;
+            border-bottom: 1px solid #f7931a;
+            margin-top: 10px;
+        }
+
+        .link:hover {
+            color: #ffb347;
+            border-bottom-color: #ffb347;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 30px;
+        }
+
+        th {
+            background: #1a1a1a;
+            border: 1px solid #333;
+            padding: 12px;
+            text-align: left;
+            font-size: 12px;
+            font-weight: 600;
+            color: #f7931a;
+        }
+
+        td {
+            border: 1px solid #333;
+            padding: 12px;
+            font-size: 12px;
+            color: #b0b0b0;
+        }
+
+        tr:hover {
+            background: rgba(247, 147, 26, 0.05);
+        }
+
+        .warning-box {
+            background: rgba(255, 152, 0, 0.1);
+            border-left: 4px solid #ff9800;
+            padding: 16px;
+            margin: 20px 0;
+            border-radius: 3px;
+            font-size: 12px;
+            line-height: 1.6;
+            color: #b0b0b0;
+        }
+
+        .warning-box strong {
+            color: #ffb74d;
+        }
+
+        .contact-box {
+            background: rgba(247, 147, 26, 0.08);
+            border: 1px solid #f7931a;
+            border-radius: 3px;
+            padding: 25px;
+            margin-top: 50px;
+        }
+
+        .contact-box h3 {
+            color: #f7931a;
+            font-size: 16px;
+            margin-bottom: 15px;
+        }
+
+        .contact-box p {
+            font-size: 12px;
+            color: #b0b0b0;
+            line-height: 1.8;
+            margin-bottom: 10px;
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid #333;
+            font-size: 11px;
+            color: #707070;
+        }
+
+        .footer a {
+            color: #f7931a;
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>₿ BITCOIN SEED BACKUP</h1>
+            <div class="subtitle">Self-Custody Resource for Bitcoin Hodlers</div>
+        </div>
+
+        <div class="intro">
+            <strong>Secure your Bitcoin by backing up your seed phrase properly.</strong> A seed phrase is your master key. Losing it means permanent loss of funds. This guide covers the essential methods for generating, storing, and backing up your recovery phrase securely.
+        </div>
+
+        <!-- SEED FORMATS TABLE -->
+        <div class="section">
+            <h2 class="section-title">Seed Formats: BIP39, SLIP-39 & Multisig</h2>
+            <p class="section-desc">Understand the three main approaches to seed backup and recovery.</p>
+
+            <table>
+                <tr>
+                    <th>Feature</th>
+                    <th>BIP39</th>
+                    <th>SLIP-39</th>
+                    <th>Multisig</th>
+                </tr>
+                <tr>
+                    <td><strong>Structure</strong></td>
+                    <td>Single 12-24 word phrase</td>
+                    <td>Multiple shares (2-of-3, 3-of-5)</td>
+                    <td>Multiple independent seeds</td>
+                </tr>
+                <tr>
+                    <td><strong>Single Point of Failure</strong></td>
+                    <td>Yes - one loss = no recovery</td>
+                    <td>No - requires N shares to recover</td>
+                    <td>No - requires M of N keys</td>
+                </tr>
+                <tr>
+                    <td><strong>Theft Risk</strong></td>
+                    <td>One backup stolen = all funds at risk</td>
+                    <td>Attacker needs multiple shares</td>
+                    <td>Attacker needs multiple keys</td>
+                </tr>
+                <tr>
+                    <td><strong>Wallet Support</strong></td>
+                    <td>Universal - all wallets</td>
+                    <td>Limited support</td>
+                    <td>Most hardware wallets</td>
+                </tr>
+                <tr>
+                    <td><strong>Best For</strong></td>
+                    <td>Standard backups, most users</td>
+                    <td>High-security setups</td>
+                    <td>Large holdings, institutions</td>
+                </tr>
+            </table>
+        </div>
+
+        <!-- SEED GENERATION -->
+        <div class="section">
+            <h2 class="section-title">Generate Your Seed</h2>
+
+            <div class="card">
+                <h3>Ian Coleman's BIP39 Tool</h3>
+                <p>Generate seeds offline with this verified, open-source tool. Download the HTML file and run it offline on an air-gapped computer.</p>
+                <ul>
+                    <li>Generate BIP39 seed phrases</li>
+                    <li>Test derivation paths</li>
+                    <li>Offline web version available</li>
+                </ul>
+                <a href="https://iancoleman.io/bip39/" target="_blank" class="link">→ iancoleman.io/bip39</a>
+            </div>
+        </div>
+
+        <!-- BACKUP METHODS -->
+        <div class="section">
+            <h2 class="section-title">Backup Methods</h2>
+
+            <div class="card">
+                <h3>Metal Seed Plates with Stamping Kit</h3>
+                <p>Durable steel plates that survive fire, water, and corrosion. Stamp your seed phrase manually with letter punches.</p>
+                <ul>
+                    <li>Steel/titanium construction</li>
+                    <li>Survives 1000°C+ fires</li>
+                    <li>Complete offline process</li>
+                </ul>
+                <a href="https://jlopp.github.io/metal-bitcoin-storage-reviews/" target="_blank" class="link">→ Metal Storage Comparison</a>
+            </div>
+
+            <div class="card">
+                <h3>Paper Backup</h3>
+                <p>Print your seed phrase on paper. Simple but vulnerable to fire and water—use as temporary reference only, not long-term storage.</p>
+                <ul>
+                    <li>Low cost to create</li>
+                    <li>Quick to generate</li>
+                    <li>Poor durability for long-term</li>
+                </ul>
+                <a href="https://bitaddress.org/" target="_blank" class="link">→ bitaddress.org</a>
+            </div>
+
+            <div class="card">
+                <h3>Steganographic Backup</h3>
+                <p>Hide your recovery instructions in photos using LSB steganography. Dual-layer security: hidden + obfuscated.</p>
+                <ul>
+                    <li>Compression-resistant encoding</li>
+                    <li>Plausible deniability</li>
+                    <li>9-bit redundant backup</li>
+                </ul>
+                <a href="https://mysecretbit.com" target="_blank" class="link">→ My Secret Bit</a>
+            </div>
+        </div>
+
+        <!-- BEST PRACTICES -->
+        <div class="section">
+            <h2 class="section-title">Backup Best Practices</h2>
+
+            <div class="warning-box">
+                <strong>✓ Multi-Backup Strategy:</strong>
+                <ul style="margin-left: 20px; margin-top: 10px; line-height: 1.8;">
+                    <li>Generate seed offline using verified tools</li>
+                    <li>Create multiple physical backups (metal + paper + steganography)</li>
+                    <li>Store backups in geographically diverse locations</li>
+                    <li>Keep seed and passphrase completely separate</li>
+                    <li>Never store seed digitally or on internet-connected devices</li>
+                    <li>Test recovery before funding your wallet</li>
+                    <li>Use redundancy—no single backup method is perfect</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- EDUCATION RESOURCES -->
+        <div class="section">
+            <h2 class="section-title">Education & Resources</h2>
+
+            <div class="card">
+                <h3>Bitcoin Wallet Comparison</h3>
+                <p>Comprehensive guide to Bitcoin wallets and security options from MetaMask's research team.</p>
+                <a href="https://metamask.io/news/best-bitcoin-wallets" target="_blank" class="link">→ MetaMask Wallet Guide</a>
+            </div>
+
+            <div class="card">
+                <h3>Parman Bitcoin Education</h3>
+                <p>Essential Bitcoin security and self-custody education for hodlers at all experience levels.</p>
+                <a href="https://www.parman.com" target="_blank" class="link">→ parman.com</a>
+            </div>
+
+            <div class="card">
+                <h3>Bit-Block Bitcoin Resources</h3>
+                <p>Bitcoin development, security, and backup documentation for understanding the protocol.</p>
+                <a href="https://bit-block.org/bit-block-bitcoin-development/" target="_blank" class="link">→ bit-block.org</a>
+            </div>
+        </div>
+
+        <!-- CONTACT -->
+        <div class="contact-box">
+            <h3>✉️ Questions or Feedback?</h3>
+            <p>Have questions about Bitcoin seed backup? Found something that needs updating?</p>
+            <p>Reach out on X:</p>
+            <a href="https://twitter.com/marketanarchy21" target="_blank" class="link">→ @marketanarchy21</a>
+        </div>
+
+        <div class="footer">
+            <p>Bitcoin Seed Backup Guide • Always verify tools independently before use</p>
+            <p>Not financial or security advice. Use at your own risk.</p>
+        </div>
+    </div>
+</body>
+</html>

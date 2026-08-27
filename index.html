@@ -1,0 +1,1023 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Secret Bit - Universal File Steganography</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: #0a0a0a;
+            color: #e0e0e0;
+            padding: 0;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        .header {
+            margin-bottom: 40px;
+            border-bottom: 3px solid #f7931a;
+            padding-bottom: 30px;
+        }
+
+        .header h1 {
+            font-size: 36px;
+            font-weight: 700;
+            margin-bottom: 10px;
+            color: #f7931a;
+        }
+
+        .header .subtitle {
+            font-size: 13px;
+            color: #a0a0a0;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 20px;
+        }
+
+        .badge {
+            display: inline-block;
+            background: rgba(247, 147, 26, 0.1);
+            border: 1px solid #f7931a;
+            color: #f7931a;
+            padding: 4px 8px;
+            border-radius: 3px;
+            font-size: 11px;
+            font-weight: 600;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+        }
+
+        .buttons {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .buttons a {
+            display: inline-block;
+            background: #f7931a;
+            color: #000;
+            padding: 12px 24px;
+            border-radius: 3px;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .buttons a:hover {
+            background: #ffb347;
+        }
+
+        .buttons a.secondary {
+            background: #333;
+            color: #f7931a;
+            border: 1px solid #f7931a;
+        }
+
+        .critical-warning {
+            background: #330000;
+            border-left: 4px solid #ff4444;
+            padding: 16px;
+            margin-bottom: 30px;
+            border-radius: 3px;
+            font-size: 13px;
+            line-height: 1.7;
+        }
+
+        .critical-warning strong {
+            color: #ff6b6b;
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        .best-practice {
+            background: rgba(247, 147, 26, 0.08);
+            border-left: 4px solid #f7931a;
+            padding: 16px;
+            margin-bottom: 30px;
+            border-radius: 3px;
+            font-size: 13px;
+            line-height: 1.7;
+        }
+
+        .best-practice strong {
+            color: #f7931a;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 30px;
+            border-bottom: 2px solid #333;
+        }
+
+        .tab-button {
+            padding: 12px 20px;
+            background: none;
+            border: none;
+            color: #a0a0a0;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            border-bottom: 2px solid transparent;
+            margin-bottom: -2px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .tab-button.active {
+            color: #f7931a;
+            border-bottom-color: #f7931a;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .guide-section {
+            background: #1a1a1a;
+            border: 1px solid #333;
+            border-radius: 3px;
+            padding: 28px;
+            margin-bottom: 40px;
+        }
+
+        .guide-section h2 {
+            font-size: 18px;
+            color: #f7931a;
+            margin: 25px 0 15px 0;
+            font-weight: 700;
+        }
+
+        .guide-section h2:first-child {
+            margin-top: 0;
+        }
+
+        .guide-section h3 {
+            font-size: 16px;
+            color: #f7931a;
+            margin: 20px 0 12px 0;
+            font-weight: 700;
+        }
+
+        .guide-section p {
+            font-size: 13px;
+            color: #b0b0b0;
+            margin-bottom: 15px;
+            line-height: 1.8;
+        }
+
+        .guide-section ul {
+            margin-left: 20px;
+            font-size: 13px;
+            color: #b0b0b0;
+            line-height: 1.8;
+            margin-bottom: 15px;
+        }
+
+        .guide-section li {
+            margin-bottom: 8px;
+        }
+
+        .password-strength {
+            margin-top: 8px;
+            display: none;
+        }
+
+        .strength-bar {
+            height: 4px;
+            background: #333;
+            border-radius: 2px;
+            overflow: hidden;
+            margin-bottom: 4px;
+        }
+
+        .strength-fill {
+            height: 100%;
+            width: 0%;
+            transition: width 0.3s, background-color 0.3s;
+        }
+
+        .strength-text {
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .test-button {
+            background: #555;
+            color: #fff;
+            padding: 8px 12px;
+            border: none;
+            border-radius: 3px;
+            font-size: 11px;
+            cursor: pointer;
+            margin-top: 8px;
+            font-weight: 600;
+        }
+
+        .test-button:hover {
+            background: #666;
+        }
+
+        .test-result {
+            display: none;
+            margin-top: 12px;
+            padding: 12px;
+            border-radius: 3px;
+            font-size: 12px;
+        }
+
+        .test-result.pass {
+            background: rgba(76, 175, 80, 0.1);
+            color: #4db8a8;
+            border: 1px solid rgba(76, 175, 80, 0.3);
+        }
+
+        .test-result.fail {
+            background: rgba(255, 68, 68, 0.1);
+            color: #ff6b6b;
+            border: 1px solid rgba(255, 68, 68, 0.3);
+        }
+
+        .panels {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        @media (max-width: 900px) {
+            .panels {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .panel {
+            background: #1a1a1a;
+            border: 1px solid #333;
+            border-radius: 3px;
+            padding: 28px;
+        }
+
+        .panel h2 {
+            font-size: 18px;
+            margin-bottom: 20px;
+            color: #f7931a;
+            font-weight: 700;
+        }
+
+        .input-group {
+            margin-bottom: 18px;
+        }
+
+        label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #a0a0a0;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        input, textarea, select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #333;
+            border-radius: 3px;
+            font-family: inherit;
+            font-size: 13px;
+            background: #0f0f0f;
+            color: #e0e0e0;
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 80px;
+            font-family: monospace;
+        }
+
+        input:focus, textarea:focus, select:focus {
+            outline: none;
+            border-color: #f7931a;
+            box-shadow: 0 0 0 2px rgba(247, 147, 26, 0.1);
+        }
+
+        .upload-area {
+            border: 2px dashed #333;
+            border-radius: 3px;
+            padding: 24px;
+            text-align: center;
+            cursor: pointer;
+            background: #0f0f0f;
+            transition: all 0.3s;
+        }
+
+        .upload-area:hover {
+            border-color: #f7931a;
+            background: rgba(247, 147, 26, 0.05);
+        }
+
+        .upload-area.dragover {
+            border-color: #f7931a;
+            background: rgba(247, 147, 26, 0.1);
+        }
+
+        input[type="file"] {
+            display: none;
+        }
+
+        button {
+            width: 100%;
+            padding: 12px 16px;
+            background: #f7931a;
+            color: #000;
+            border: none;
+            border-radius: 3px;
+            font-weight: 700;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            cursor: pointer;
+            transition: background 0.2s;
+            margin-top: 10px;
+        }
+
+        button:hover:not(:disabled) {
+            background: #ffb347;
+        }
+
+        button:disabled {
+            background: #555;
+            color: #999;
+            cursor: not-allowed;
+        }
+
+        .result-box {
+            background: #0f0f0f;
+            border: 1px solid #333;
+            border-radius: 3px;
+            padding: 18px;
+            margin-top: 12px;
+            display: none;
+        }
+
+        .result-box.visible {
+            display: block;
+        }
+
+        .result-title {
+            color: #f7931a;
+            font-weight: 700;
+            margin-bottom: 12px;
+            text-transform: uppercase;
+            font-size: 12px;
+        }
+
+        .result-text {
+            background: #1a1a1a;
+            padding: 12px;
+            border-radius: 3px;
+            font-family: monospace;
+            font-size: 13px;
+            color: #f7931a;
+            word-break: break-all;
+            border: 1px solid #333;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+
+        .message {
+            padding: 12px;
+            border-radius: 3px;
+            margin-top: 12px;
+            font-size: 12px;
+            display: none;
+        }
+
+        .message.visible {
+            display: block;
+        }
+
+        .message.success {
+            background: rgba(76, 175, 80, 0.1);
+            color: #4db8a8;
+            border: 1px solid rgba(76, 175, 80, 0.3);
+        }
+
+        .message.error {
+            background: rgba(255, 68, 68, 0.1);
+            color: #ff6b6b;
+            border: 1px solid rgba(255, 68, 68, 0.3);
+        }
+
+        .format-info {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .format-card {
+            background: #1a1a1a;
+            border: 1px solid #333;
+            border-radius: 3px;
+            padding: 16px;
+        }
+
+        .format-card h3 {
+            color: #f7931a;
+            font-size: 14px;
+            margin-bottom: 8px;
+        }
+
+        .format-card p {
+            font-size: 12px;
+            color: #b0b0b0;
+            line-height: 1.5;
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid #333;
+            font-size: 11px;
+            color: #707070;
+        }
+
+        .footer a {
+            color: #f7931a;
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="badge">₿ Bitcoin Backed Up</div>
+            <h1>MY SECRET BIT</h1>
+            <div class="subtitle">Hide Your Recovery Location in Any File Type</div>
+
+            <div class="buttons" style="margin-top: 20px;">
+                <a href="https://strike.me/@bluejays93">⚡ Tip with Bitcoin</a>
+                <a href="https://monetarynode.org" class="secondary">📡 Monetary Node</a>
+                <a href="https://sambitcoin.github.io/inscription-payload-scan/" class="secondary">🔐 Self Custody Guide</a>
+            </div>
+        </div>
+
+        <div class="critical-warning">
+            <strong>⚠️ CRITICAL SECURITY REMINDER</strong>
+            <p>Never enter your actual seed phrase or private keys into this tool. Enter ONLY recovery location instructions—vague hints meaningful only to you. Example: "Grandma's attic, blue shoebox, back left corner"—not actual coordinates or identifiers.</p>
+        </div>
+
+        <div class="best-practice">
+            <strong>✓ Best Practices</strong>
+            <p>Use lossless formats only: PNG (images), WAV/FLAC (audio). Lossy formats (JPEG, MP3) destroy hidden data. Test recovery before storing critical data. Create multiple backups in different locations. This is ONE layer of security—combine with physical backups, encryption, and multisig.</p>
+        </div>
+
+        <!-- TABS -->
+        <div class="tabs">
+            <button class="tab-button active" onclick="switchTab('tool')">🔧 Tool</button>
+            <button class="tab-button" onclick="switchTab('guide')">📖 Guide</button>
+            <button class="tab-button" onclick="switchTab('understanding')">📚 Understanding Steganography</button>
+        </div>
+
+        <!-- TOOL TAB -->
+        <div id="tool" class="tab-content active">
+            <div class="panels">
+                <!-- ENCODE PANEL -->
+                <div class="panel">
+                    <h2>Hide Message</h2>
+
+                    <div class="input-group">
+                        <label>Carrier File (PNG, WAV, FLAC, or any lossless format)</label>
+                        <div class="upload-area" id="uploadArea" onclick="document.getElementById('fileInput').click()">
+                            <div style="font-size: 32px; margin-bottom: 10px;">📁</div>
+                            <div style="font-size: 13px; color: #a0a0a0;">Click to upload or drag & drop</div>
+                            <div style="font-size: 11px; color: #707070; margin-top: 8px;">Lossless formats: PNG, WAV, FLAC</div>
+                        </div>
+                        <input type="file" id="fileInput" onchange="handleFileSelect(event)">
+                        <div id="fileName" style="font-size: 12px; color: #f7931a; margin-top: 8px; display: none;"></div>
+                    </div>
+
+                    <div class="input-group">
+                        <label>Message to Hide</label>
+                        <textarea id="encodeMessage" placeholder="Vague recovery instructions (not seed phrases!)"></textarea>
+                    </div>
+
+                    <div class="input-group">
+                        <label>Encryption Password (optional but recommended)</label>
+                        <div style="font-size: 11px; color: #707070; margin-bottom: 8px;">Use a UNIQUE password created just for this backup. Never reuse passwords from other accounts. This password never leaves your device.</div>
+                        <input type="password" id="encodePassword" placeholder="Create a unique password or leave blank for no encryption" oninput="updatePasswordStrength()">
+                        <div class="password-strength" id="passwordStrength">
+                            <div class="strength-bar">
+                                <div class="strength-fill" id="strengthFill"></div>
+                            </div>
+                            <div class="strength-text" id="strengthText">Weak</div>
+                        </div>
+                        <button class="test-button" onclick="testEncryption()">🧪 Test Encryption</button>
+                        <div class="test-result" id="testResult"></div>
+                    </div>
+
+                    <button onclick="encodeMessage()">Hide Message in File</button>
+                    <div id="encodeResult" class="message"></div>
+                </div>
+
+                <!-- DECODE PANEL -->
+                <div class="panel">
+                    <h2>Extract Message</h2>
+
+                    <div class="input-group">
+                        <label>Carrier File (with hidden message)</label>
+                        <div class="upload-area" id="uploadArea2" onclick="document.getElementById('fileInput2').click()">
+                            <div style="font-size: 32px; margin-bottom: 10px;">📁</div>
+                            <div style="font-size: 13px; color: #a0a0a0;">Click to upload or drag & drop</div>
+                        </div>
+                        <input type="file" id="fileInput2" onchange="handleFileSelect2(event)">
+                        <div id="fileName2" style="font-size: 12px; color: #f7931a; margin-top: 8px; display: none;"></div>
+                    </div>
+
+                    <div class="input-group">
+                        <label>Encryption Password (if used during encoding)</label>
+                        <input type="password" id="decodePassword" placeholder="Leave blank if not encrypted">
+                    </div>
+
+                    <button onclick="decodeMessage()">Extract Message from File</button>
+                    <div id="decodeResult" class="message"></div>
+                    <div id="decodeBox" class="result-box">
+                        <div class="result-title">Extracted Message</div>
+                        <div class="result-text" id="decodeText"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- GUIDE TAB -->
+        <div id="guide" class="tab-content">
+            <div class="guide-section">
+                <h2>Sharing with Loved Ones & Estate Planning</h2>
+
+                <h3>Email to Trusted Family Member</h3>
+
+                <p>Send the file with the hidden message AND a separate, encrypted email with just the password. Never send both together. Example:</p>
+
+                <p style="background: #0f0f0f; padding: 12px; border-left: 3px solid #f7931a; margin: 15px 0;">"Hi, I've created a backup of important information in case something happens to me. This photo [attached] contains recovery instructions. The password is in a separate secure email. Keep this safe."</p>
+
+                <h3>Estate Attorney Communication</h3>
+
+                <p>Provide your attorney with:</p>
+
+                <ul>
+                    <li>A sealed envelope marked "To Be Opened In Case of Emergency" containing password(s)</li>
+                    <li>A written description of WHERE the stego files are stored (but not HOW to extract the message)</li>
+                    <li>Instructions to contact specific trusted family members who have the extraction passwords</li>
+                    <li>A master backup of your seed phrase in your attorney's vault (encrypted separately)</li>
+                </ul>
+
+                <h3>Best Practice</h3>
+
+                <p>Compartmentalize—never store the file, password, and location clues all together. Use the steganography tool as ONE part of a multi-layer system.</p>
+            </div>
+        </div>
+
+        <!-- UNDERSTANDING STEGANOGRAPHY TAB -->
+        <div id="understanding" class="tab-content">
+            <div class="guide-section">
+                <h2>Understanding File Steganography</h2>
+
+                <p>My Secret Bit uses <strong>Least Significant Bit (LSB) steganography</strong> to hide data inside files. By modifying the least significant bits of file data, you can hide messages without perceptibly changing the original file. This works with any digital file—images, audio, video, or binary data.</p>
+
+                <h3>Supported File Types</h3>
+
+                <div class="format-info">
+                    <div class="format-card">
+                        <h3>🖼️ Images (PNG)</h3>
+                        <p>Best for most uses. PNG is lossless and ubiquitous. Can hide ~128 KB per 1 MB of image.</p>
+                    </div>
+
+                    <div class="format-card">
+                        <h3>🎵 Audio (WAV/FLAC)</h3>
+                        <p>Excellent for larger data. Can hide much more than images. Store as personal music files.</p>
+                    </div>
+
+                    <div class="format-card">
+                        <h3>🎬 Video (Uncompressed)</h3>
+                        <p>Massive capacity. Can store complete encrypted backups. Plausible as home videos.</p>
+                    </div>
+
+                    <div class="format-card">
+                        <h3>📄 Binary Files</h3>
+                        <p>Works with any file—PDFs, archives, executables. Ultimate plausible deniability.</p>
+                    </div>
+
+                    <div class="format-card">
+                        <h3>❌ Avoid: JPEG</h3>
+                        <p>Lossy compression destroys hidden data. Never use JPEG for steganography.</p>
+                    </div>
+
+                    <div class="format-card">
+                        <h3>❌ Avoid: MP3</h3>
+                        <p>Lossy compression loses LSB data. Use WAV or FLAC instead for audio.</p>
+                    </div>
+                </div>
+
+                <h3>For Bitcoin Self-Custody</h3>
+
+                <p><strong>Strategy:</strong> Hide encrypted recovery instructions in a family photo. The photo looks normal, but contains vague clues only you understand: "Grandma's safe, behind painting" or "Dad's office, third drawer left side."</p>
+
+                <p><strong>Multi-layer approach:</strong></p>
+
+                <ul>
+                    <li>Hide encrypted instructions in photos/audio (steganography)</li>
+                    <li>Store encrypted backup in metal plate or paper in physical location</li>
+                    <li>Keep passphrase separate from seed backup</li>
+                    <li>Share clues with trusted family member via different channel</li>
+                    <li>Test recovery before trusting with real funds</li>
+                </ul>
+
+                <div class="best-practice" style="margin-top: 25px;">
+                    <strong>⚠️ Important Limitations</strong>
+                    <p style="margin-bottom: 10px;">This tool uses basic LSB encoding. For critical Bitcoin backups, consider:</p>
+                    <ul style="margin-left: 20px; font-size: 12px; color: #b0b0b0;">
+                        <li>Always encrypt data before hiding (AES-256 minimum)</li>
+                        <li>Never re-compress files after encoding (destroys hidden data)</li>
+                        <li>Test recovery before storing critical data</li>
+                        <li>Use redundancy: multiple copies in different formats/locations</li>
+                        <li>This is ONE layer of security—combine with other methods</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer">
+            <p>My Secret Bit • Hide Bitcoin Recovery Instructions in Plain Sight</p>
+            <p style="margin-top: 15px;">
+                Open Source Tools: <a href="https://steghide.sourceforge.net" target="_blank">Steghide</a> •
+                <a href="https://github.com/0xACE/LSBSteg" target="_blank">LSBSteg</a> •
+                <a href="https://github.com/k1lgor/SilentEye" target="_blank">SilentEye</a>
+            </p>
+
+            <div style="margin-top: 30px; padding-top: 20px; border-top: 1px solid #333; font-size: 11px; line-height: 1.8; color: #808080;">
+                <strong style="color: #f7931a;">LEGAL DISCLAIMER & RESPONSIBILITY</strong>
+                <p style="margin-top: 10px;">This tool is provided "as-is" for educational purposes. Users are solely responsible for:</p>
+                <ul style="margin-left: 20px; margin-top: 10px;">
+                    <li>Securing their Bitcoin funds and recovery information</li>
+                    <li>Testing recovery procedures before trusting with real funds</li>
+                    <li>Creating multiple backup redundancies (this is ONE layer only)</li>
+                    <li>Sharing recovery information securely with designated heirs/trustees</li>
+                    <li>Consulting with a qualified estate attorney about Bitcoin inheritance</li>
+                    <li>Compliance with all applicable tax and financial regulations in your jurisdiction</li>
+                    <li>Ensuring designated beneficiaries understand how to recover funds in case of emergency</li>
+                </ul>
+                <p style="margin-top: 15px;">The developer assumes no liability for lost funds, forgotten passwords, corrupted backups, or improper use. Steganography is not a replacement for proper legal estate planning. Consult professionals before implementing any system for securing significant Bitcoin holdings.</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let carrierFile = null;
+        let carrierFile2 = null;
+
+        function switchTab(tabName) {
+            document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.tab-button').forEach(b => b.classList.remove('active'));
+            document.getElementById(tabName).classList.add('active');
+            event.target.classList.add('active');
+        }
+
+        function handleFileSelect(e) {
+            const file = e.target.files[0];
+            if (file) {
+                // Check for rejected file types
+                const lowercaseName = file.name.toLowerCase();
+                const resultDiv = document.getElementById('encodeResult');
+
+                if (lowercaseName.endsWith('.jpg') || lowercaseName.endsWith('.jpeg')) {
+                    showMessage(resultDiv, '❌ JPEG files cannot be used for steganography. JPEG uses lossy compression which destroys hidden data. Use PNG instead for images.', 'error');
+                    document.getElementById('fileInput').value = '';
+                    carrierFile = null;
+                    document.getElementById('fileName').style.display = 'none';
+                    return;
+                }
+
+                if (lowercaseName.endsWith('.mp3')) {
+                    showMessage(resultDiv, '❌ MP3 files cannot be used for steganography. MP3 uses lossy compression which destroys hidden data. Use WAV or FLAC instead for audio.', 'error');
+                    document.getElementById('fileInput').value = '';
+                    carrierFile = null;
+                    document.getElementById('fileName').style.display = 'none';
+                    return;
+                }
+
+                carrierFile = file;
+                document.getElementById('fileName').textContent = '✓ ' + file.name + ' (' + formatBytes(file.size) + ')';
+                document.getElementById('fileName').style.display = 'block';
+                // Clear any error messages on successful selection
+                resultDiv.style.display = 'none';
+            }
+        }
+
+        function handleFileSelect2(e) {
+            const file = e.target.files[0];
+            if (file) {
+                // Check for rejected file types
+                const lowercaseName = file.name.toLowerCase();
+                const resultDiv = document.getElementById('decodeResult');
+
+                if (lowercaseName.endsWith('.jpg') || lowercaseName.endsWith('.jpeg')) {
+                    showMessage(resultDiv, '❌ JPEG files cannot be used for steganography. JPEG uses lossy compression which destroys hidden data.', 'error');
+                    document.getElementById('fileInput2').value = '';
+                    carrierFile2 = null;
+                    document.getElementById('fileName2').style.display = 'none';
+                    return;
+                }
+
+                if (lowercaseName.endsWith('.mp3')) {
+                    showMessage(resultDiv, '❌ MP3 files cannot be used for steganography. MP3 uses lossy compression which destroys hidden data.', 'error');
+                    document.getElementById('fileInput2').value = '';
+                    carrierFile2 = null;
+                    document.getElementById('fileName2').style.display = 'none';
+                    return;
+                }
+
+                carrierFile2 = file;
+                document.getElementById('fileName2').textContent = '✓ ' + file.name + ' (' + formatBytes(file.size) + ')';
+                document.getElementById('fileName2').style.display = 'block';
+                // Clear any error messages on successful selection
+                resultDiv.style.display = 'none';
+            }
+        }
+
+        async function encodeMessage() {
+            const message = document.getElementById('encodeMessage').value;
+            const password = document.getElementById('encodePassword').value;
+            const resultDiv = document.getElementById('encodeResult');
+
+            if (!carrierFile) {
+                showMessage(resultDiv, 'Select a carrier file first', 'error');
+                return;
+            }
+
+            if (!message) {
+                showMessage(resultDiv, 'Enter a message to hide', 'error');
+                return;
+            }
+
+            try {
+                const fileData = await readFileAsBytes(carrierFile);
+                let dataToHide = new TextEncoder().encode(message);
+
+                if (password) {
+                    dataToHide = await encryptData(dataToHide, password);
+                }
+
+                const encoded = lsbEncode(fileData, dataToHide);
+                downloadFile(encoded, 'output-' + carrierFile.name, carrierFile.type);
+
+                showMessage(resultDiv, '✓ Message hidden! Download started. File contains ' + dataToHide.length + ' bytes of data.', 'success');
+            } catch (err) {
+                showMessage(resultDiv, 'Error: ' + err.message, 'error');
+            }
+        }
+
+        async function decodeMessage() {
+            const password = document.getElementById('decodePassword').value;
+            const resultDiv = document.getElementById('decodeResult');
+            const textBox = document.getElementById('decodeBox');
+
+            if (!carrierFile2) {
+                showMessage(resultDiv, 'Select a carrier file first', 'error');
+                return;
+            }
+
+            try {
+                const fileData = await readFileAsBytes(carrierFile2);
+                let extracted = lsbDecode(fileData);
+
+                if (password) {
+                    extracted = await decryptData(extracted, password);
+                }
+
+                const message = new TextDecoder().decode(extracted);
+                document.getElementById('decodeText').textContent = message;
+                textBox.classList.add('visible');
+                showMessage(resultDiv, '✓ Message extracted successfully', 'success');
+            } catch (err) {
+                showMessage(resultDiv, 'Error: ' + err.message, 'error');
+            }
+        }
+
+        function lsbEncode(carrier, data) {
+            const result = new Uint8Array(carrier);
+            const lengthBytes = new Uint32Array([data.length]);
+
+            // Write length header (4 bytes)
+            for (let i = 0; i < 4; i++) {
+                const byte = lengthBytes[0] >> (i * 8) & 0xFF;
+                for (let j = 0; j < 8 && i * 8 + j < 32; j++) {
+                    const bit = (byte >> j) & 1;
+                    result[i * 8 + j] = (result[i * 8 + j] & 0xFE) | bit;
+                }
+            }
+
+            // Write data
+            for (let i = 0; i < data.length; i++) {
+                const byte = data[i];
+                for (let j = 0; j < 8; j++) {
+                    const bit = (byte >> j) & 1;
+                    result[32 + i * 8 + j] = (result[32 + i * 8 + j] & 0xFE) | bit;
+                }
+            }
+
+            return result;
+        }
+
+        function lsbDecode(carrier) {
+            // Read length header
+            let length = 0;
+            for (let i = 0; i < 4; i++) {
+                for (let j = 0; j < 8; j++) {
+                    const bit = (carrier[i * 8 + j] & 1);
+                    length |= (bit << (i * 8 + j));
+                }
+            }
+
+            // Read data
+            const data = new Uint8Array(length);
+            for (let i = 0; i < length; i++) {
+                let byte = 0;
+                for (let j = 0; j < 8; j++) {
+                    const bit = (carrier[32 + i * 8 + j] & 1);
+                    byte |= (bit << j);
+                }
+                data[i] = byte;
+            }
+
+            return data;
+        }
+
+        async function encryptData(data, password) {
+            const key = await deriveKey(password);
+            const iv = crypto.getRandomValues(new Uint8Array(12));
+            const encrypted = await crypto.subtle.encrypt({ name: 'AES-GCM', iv }, key, data);
+            const result = new Uint8Array(iv.length + encrypted.byteLength);
+            result.set(iv, 0);
+            result.set(new Uint8Array(encrypted), iv.length);
+            return result;
+        }
+
+        async function decryptData(data, password) {
+            const key = await deriveKey(password);
+            const iv = data.slice(0, 12);
+            const encrypted = data.slice(12);
+            return new Uint8Array(await crypto.subtle.decrypt({ name: 'AES-GCM', iv }, key, encrypted));
+        }
+
+        async function deriveKey(password) {
+            const salt = new TextEncoder().encode('mysecretbit');
+            const key = await crypto.subtle.importKey('raw', new TextEncoder().encode(password), 'PBKDF2', false, ['deriveKey']);
+            return crypto.subtle.deriveKey({ name: 'PBKDF2', salt, iterations: 100000, hash: 'SHA-256' }, key, { name: 'AES-GCM', length: 256 }, false, ['encrypt', 'decrypt']);
+        }
+
+        function readFileAsBytes(file) {
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.onload = e => resolve(new Uint8Array(e.target.result));
+                reader.onerror = reject;
+                reader.readAsArrayBuffer(file);
+            });
+        }
+
+        function downloadFile(data, filename, type) {
+            const blob = new Blob([data], { type });
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = filename;
+            link.click();
+            URL.revokeObjectURL(url);
+        }
+
+        function showMessage(div, text, type) {
+            div.textContent = text;
+            div.className = 'message visible ' + type;
+        }
+
+        function formatBytes(bytes) {
+            if (bytes === 0) return '0 Bytes';
+            const k = 1024;
+            const sizes = ['Bytes', 'KB', 'MB'];
+            const i = Math.floor(Math.log(bytes) / Math.log(k));
+            return Math.round(bytes / Math.pow(k, i) * 100) / 100 + ' ' + sizes[i];
+        }
+
+        function updatePasswordStrength() {
+            const password = document.getElementById('encodePassword').value;
+            const strengthDiv = document.getElementById('passwordStrength');
+            const strengthFill = document.getElementById('strengthFill');
+            const strengthText = document.getElementById('strengthText');
+
+            if (!password) {
+                strengthDiv.style.display = 'none';
+                return;
+            }
+
+            strengthDiv.style.display = 'block';
+
+            let strength = 0;
+            let text = 'Weak';
+            let color = '#ff6b6b';
+
+            // Length check
+            if (password.length >= 8) strength++;
+            if (password.length >= 12) strength++;
+            if (password.length >= 16) strength++;
+
+            // Character variety
+            if (/[a-z]/.test(password)) strength++;
+            if (/[A-Z]/.test(password)) strength++;
+            if (/[0-9]/.test(password)) strength++;
+            if (/[^a-zA-Z0-9]/.test(password)) strength++;
+
+            const percent = Math.min(strength * 14.3, 100);
+            strengthFill.style.width = percent + '%';
+
+            if (strength <= 2) {
+                text = 'Weak';
+                color = '#ff6b6b';
+            } else if (strength <= 4) {
+                text = 'Fair';
+                color = '#ffa500';
+            } else if (strength <= 6) {
+                text = 'Good';
+                color = '#4db8a8';
+            } else {
+                text = 'Strong';
+                color = '#4dff4d';
+            }
+
+            strengthFill.style.backgroundColor = color;
+            strengthText.textContent = text;
+            strengthText.style.color = color;
+        }
+
+        async function testEncryption() {
+            const password = document.getElementById('encodePassword').value;
+            const testResult = document.getElementById('testResult');
+
+            if (!password) {
+                testResult.className = 'test-result fail';
+                testResult.textContent = '❌ Enter a password to test encryption';
+                testResult.style.display = 'block';
+                return;
+            }
+
+            try {
+                const testMessage = 'TEST MESSAGE - If you can read this, encryption works!';
+                const testData = new TextEncoder().encode(testMessage);
+
+                // Encrypt
+                const encrypted = await encryptData(testData, password);
+
+                // Decrypt
+                const decrypted = await decryptData(encrypted, password);
+                const decryptedMessage = new TextDecoder().decode(decrypted);
+
+                // Verify
+                if (decryptedMessage === testMessage) {
+                    testResult.className = 'test-result pass';
+                    testResult.textContent = '✓ Encryption test passed! Your password works correctly.';
+                    testResult.style.display = 'block';
+                } else {
+                    testResult.className = 'test-result fail';
+                    testResult.textContent = '❌ Encryption test failed: decrypted message does not match.';
+                    testResult.style.display = 'block';
+                }
+            } catch (err) {
+                testResult.className = 'test-result fail';
+                testResult.textContent = '❌ Encryption test error: ' + err.message;
+                testResult.style.display = 'block';
+            }
+        }
+    </script>
+</body>
+</html>
